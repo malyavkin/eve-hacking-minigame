@@ -30,7 +30,8 @@ public class DataContainer {
         map.get(2,2).content = new SystemCoreNode(123,456,this);
         map.get(6,6).content.state = NodeState.explored;
         exposeSurroundings(map.get(6,6).content);
-     //   exposeSurroundings(map.get(2,1).content);
+        exposeSurroundings(map.get(2,1).content);
+        map.get(2,2).content.trigger();
     }
 
     public void exposeSurroundings(Node node) {

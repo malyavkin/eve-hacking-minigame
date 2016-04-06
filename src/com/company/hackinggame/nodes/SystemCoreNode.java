@@ -20,6 +20,7 @@ public class SystemCoreNode extends ActorNode {
             case unexplorable:
                 return unexplorable;
             case explorable:
+                return explorable;
             case explored:
                 return String.format("%03d\n>X<\n%03d", actor.getCoherence(), actor.getStrength());
         }

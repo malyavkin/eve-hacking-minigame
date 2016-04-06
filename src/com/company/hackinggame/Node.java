@@ -8,6 +8,7 @@ public class Node {
     public int blockCounter;
     public boolean inDataCache;
     protected final String unexplorable ="###\n###\n###";
+    protected final String explorable = "===\n#?#\n===";
     public Node(DataContainer container) {
         this.container = container;
         blockCounter = 0;
@@ -27,7 +28,7 @@ public class Node {
             case unexplorable:
                 return unexplorable;
             case explorable:
-                return "===\n#?#\n===";
+                return explorable;
             case explored:
                 return "---\n( )\n---";
         }
