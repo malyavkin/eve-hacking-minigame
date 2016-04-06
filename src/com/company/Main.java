@@ -10,6 +10,6 @@ public class Main {
         DemoPreset cp = new DemoPreset();
         DataContainer dataContainer = new DataContainer(cp);
         dataContainer.draw();
-		dataContainer.virus.setCoherence(0);
+		dataContainer.virus.setCoherence(1);
     }
 }
