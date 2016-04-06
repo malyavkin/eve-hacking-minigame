@@ -5,13 +5,14 @@ import com.company.graph.HexNode;
 import com.company.hackinggame.nodes.SystemCoreNode;
 import com.company.presets.IContainerPreset;
 import com.company.string_framebuffer.StringBuffer;
+import com.company.utils.Utils;
 
 import java.util.ArrayList;
 
 public class DataContainer {
-    public HexMesh<Node> map;
-    public int width, height;
-    public Virus virus;
+    private HexMesh<Node> map;
+    private int width, height;
+    private Virus virus;
     public DataContainer(IContainerPreset containerPreset) {
         this.width = containerPreset.getFieldSizeWidth();
         this.height = containerPreset.getFieldSizeHeight();
@@ -20,14 +21,18 @@ public class DataContainer {
         populate(containerPreset);
 
     }
-
+    public  void move(int i, int j){
+        this.map.get(i,j).content.trigger();
+        String id = Utils.getID(map.get(i,j));
+        System.out.println("triggered "+ id + "; current status "+ map.get(i,j).content.state);
+    }
     private void populate(IContainerPreset containerPreset){
         for (ArrayList<HexNode<Node>> hexNodes : map.mesh) {
             for (HexNode<Node> hexNode : hexNodes) {
                 hexNode.content = new Node(this);
             }
         }
-        //map.get(2,2).content = new SystemCoreNode(123,456,this);
+        map.get(2,2).content = new SystemCoreNode(123,456,this);
         //map.get(6,6).content.state = NodeState.explored;
         //exposeSurroundings(map.get(6,6).content);
         map.get(2,1).content.state = NodeState.explorable;
@@ -77,8 +82,12 @@ public class DataContainer {
             int indent = (i%2)*4;
             int voffset = i*4;
             for (int j = 0; j < hexNodes.size(); j++) {
+
+                String id = Utils.getID(hexNodes.get(j));
+
                 HexNode<Node> hexNode= hexNodes.get(j);
                 int hoffset = j*8;
+                sb.pushString(voffset+3, hoffset+indent, id);
                 sb.pushString(voffset, hoffset+indent, hexNode.content.toString());
             }
         }

@@ -1,0 +1,5 @@
+*.dex
+*.class
+/out
+/bin
+/.idea
