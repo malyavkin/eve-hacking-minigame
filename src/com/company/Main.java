@@ -1,22 +1,39 @@
 package com.company;
 
 import com.company.hackinggame.DataContainer;
+import com.company.hackinggame.handlers.IGameTerminator;
 import com.company.presets.DemoPreset;
 import com.company.utils.Utils;
 
 import java.io.*;
 
 public class Main {
-
+    public static boolean gameRun=  true;
     public static void main(String[] args) {
 	// write your code here
+
+
         DemoPreset cp = new DemoPreset();
         DataContainer dataContainer = new DataContainer(cp);
+        dataContainer.setGameTerminator(new IGameTerminator() {
+            @Override
+            public void onContainerOpen() {
+                gameRun = false;
+                System.out.println("you won 1b isk");
+            }
+
+            @Override
+            public void onVirusDestruction() {
+                gameRun = false;
+                System.out.println("oh noes container destroyed!");
+            }
+        });
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
         String s;
         try
         {
-            while (true){
+            while (gameRun){
                 dataContainer.draw();
                 s = in.readLine();
                 if(s == null || s.length() == 0){

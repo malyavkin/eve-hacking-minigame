@@ -1,6 +1,8 @@
 package com.company.hackinggame.nodes;
 
 import com.company.hackinggame.DataContainer;
+import com.company.hackinggame.NodeState;
+import com.company.hackinggame.Virus;
 import com.company.hackinggame.handlers.IKillHandler;
 
 public class SystemCoreNode extends ActorNode {
@@ -14,6 +16,20 @@ public class SystemCoreNode extends ActorNode {
             }
         });
     }
+
+    @Override
+    public void trigger(Virus virus) {
+        switch (state){
+            case explorable:
+                state = NodeState.explored;
+                container.exposeSurroundings(this);
+                break;
+            case explored:
+                getHit(virus);
+                break;
+        }
+    }
+
     @Override
     public String toString() {
         switch (state){

@@ -9,13 +9,14 @@ public class Node {
     public boolean inDataCache;
     protected final String unexplorable ="###\n###\n###";
     protected final String explorable = "===\n#?#\n===";
+    protected final String explored = "---\n( )\n---";
     public Node(DataContainer container) {
         this.container = container;
         blockCounter = 0;
 
         state = NodeState.unexplorable;
     }
-    public void trigger(){
+    public void trigger(Virus virus){
         if (state == NodeState.explorable) {
             state = NodeState.explored;
             container.exposeSurroundings(this);
@@ -30,7 +31,7 @@ public class Node {
             case explorable:
                 return explorable;
             case explored:
-                return "---\n( )\n---";
+                return explored;
         }
         return "wtf\ntfw\nfwt";
     }

@@ -11,12 +11,7 @@ public class Virus extends Actor{
     public Virus(int strength, int coherence, DataContainer container) {
         super(strength, coherence, container);
         IPowerups = new ArrayList<>(3);
-        this.setKillHandler(new IKillHandler() {
-            @Override
-            public void onKill() {
-                System.out.println("lose");
-            }
-        });
+
     }
 
     public void attack(ActorNode actorNode){
