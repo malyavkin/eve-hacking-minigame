@@ -5,7 +5,7 @@ import com.company.hackinggame.NodeState;
 import com.company.hackinggame.Virus;
 import com.company.hackinggame.handlers.IKillHandler;
 
-public class SystemCoreNode extends ActorNode {
+public class SystemCoreNode extends DefensiveSubsystemNode {
     public SystemCoreNode(int strength, int coherence, final DataContainer container) {
         super(strength, coherence, container);
 
@@ -26,6 +26,9 @@ public class SystemCoreNode extends ActorNode {
                 break;
             case explored:
                 getHit(virus);
+                if(getCoherence() > 0){
+                    hit(virus);
+                }
                 break;
         }
     }

@@ -6,6 +6,7 @@ import com.company.hackinggame.handlers.IGameTerminator;
 import com.company.hackinggame.handlers.IKillHandler;
 import com.company.hackinggame.nodes.AntivirusNode;
 import com.company.hackinggame.nodes.DefensiveSubsystemNode;
+import com.company.hackinggame.nodes.FirewallNode;
 import com.company.hackinggame.nodes.SystemCoreNode;
 import com.company.presets.IContainerPreset;
 import com.company.string_framebuffer.StringBuffer;
@@ -49,9 +50,9 @@ public class DataContainer {
                 hexNode.content = new Node(this);
             }
         }
-        map.get(2,2).content = new SystemCoreNode(123,100,this);
-        map.get(2,3).content = new AntivirusNode(20,100,this);
-        map.get(2,0).content = new AntivirusNode(20,100,this);
+        map.get(2,2).content = new SystemCoreNode(10,50,this);
+        map.get(2,3).content = new AntivirusNode(40,30,this);
+        map.get(2,0).content = new FirewallNode(20,60,this);
         //map.get(6,6).content.state = NodeState.explored;
         //exposeSurroundings(map.get(6,6).content);
         map.get(2,1).content.state = NodeState.explorable;

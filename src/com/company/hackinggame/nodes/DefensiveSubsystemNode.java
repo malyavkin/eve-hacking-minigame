@@ -35,7 +35,7 @@ public class DefensiveSubsystemNode extends ActorNode {
                 break;
             case explored:
                 getHit(virus);
-                if(getCoherence() > 0){
+                if(isAlive()){
                     hit(virus);
                 }
                 break;
