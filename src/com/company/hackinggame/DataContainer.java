@@ -4,10 +4,7 @@ import com.company.graph.HexMesh;
 import com.company.graph.HexNode;
 import com.company.hackinggame.handlers.IGameTerminator;
 import com.company.hackinggame.handlers.IKillHandler;
-import com.company.hackinggame.nodes.AntivirusNode;
-import com.company.hackinggame.nodes.DefensiveSubsystemNode;
-import com.company.hackinggame.nodes.FirewallNode;
-import com.company.hackinggame.nodes.SystemCoreNode;
+import com.company.hackinggame.nodes.*;
 import com.company.presets.IContainerPreset;
 import com.company.string_framebuffer.StringBuffer;
 import com.company.utils.Utils;
@@ -19,6 +16,32 @@ public class DataContainer {
     private int width, height;
     private Virus virus;
     private IGameTerminator terminator;
+
+    //perks
+    private int getActiveSuppressorsCount(){
+        int count =0;
+        ArrayList<DefensiveSubsystemNode> defensiveSubsystemNodes = getDefensiveSubsystems();
+        for (DefensiveSubsystemNode defensiveSubsystemNode : defensiveSubsystemNodes) {
+            if(defensiveSubsystemNode instanceof VirusSuppressorNode && defensiveSubsystemNode.isActive()){
+                count++;
+            }
+        }
+        return count;
+    }
+    private boolean isSuppressed(){
+        return getActiveSuppressorsCount()>0;
+    }
+    // todo: it's 50% or -15
+    public int getEffectiveVirusStrength(){
+        if(isSuppressed()){
+            return virus.getStrength()/2;
+        }
+        return virus.getStrength();
+    }
+
+    public void hitVirusWith(ActorNode node){
+        virus.setCoherence(virus.getCoherence()-node.getStrength());
+    }
 
     public DataContainer(IContainerPreset containerPreset) {
         this.width = containerPreset.getFieldSizeWidth();
@@ -40,7 +63,12 @@ public class DataContainer {
         HexNode<Node> target = this.map.get(i,j);
         String id = Utils.getID(target);
         System.out.println("triggered "+ id + "; current status "+ target.content.state);
-        this.map.get(i,j).content.trigger(virus);
+        this.map.get(i,j).content.trigger();
+
+        ArrayList<DefensiveSubsystemNode> defensiveSubsystemNodes = getDefensiveSubsystems();
+        for (DefensiveSubsystemNode defensiveSubsystemNode : defensiveSubsystemNodes) {
+            defensiveSubsystemNode.move();
+        }
 
     }
 
@@ -53,15 +81,27 @@ public class DataContainer {
         map.get(2,2).content = new SystemCoreNode(10,50,this);
         map.get(2,3).content = new AntivirusNode(40,30,this);
         map.get(2,0).content = new FirewallNode(20,60,this);
+        map.get(1,1).content = new RestorationNode(10,80,this);
+        map.get(3,0).content = new VirusSuppressorNode(20,30,this);
         //map.get(6,6).content.state = NodeState.explored;
         //exposeSurroundings(map.get(6,6).content);
         map.get(2,1).content.state = NodeState.explorable;
-        map.get(2,1).content.trigger(virus);
+        map.get(2,1).content.trigger();
         //map.get(2,2).content.trigger();
         map.get(3,3).content = null;
 
     }
-
+    public ArrayList<DefensiveSubsystemNode> getDefensiveSubsystems(){
+        ArrayList<DefensiveSubsystemNode> defensiveSubsystemNodes = new ArrayList<>();
+        for (ArrayList<HexNode<Node>> hexNodes : map.mesh) {
+            for (HexNode<Node> hexNode : hexNodes) {
+                if(hexNode.content instanceof DefensiveSubsystemNode){
+                    defensiveSubsystemNodes.add((DefensiveSubsystemNode)hexNode.content);
+                }
+            }
+        }
+        return defensiveSubsystemNodes;
+    }
     public void exposeSurroundings(Node node) {
         HexNode<Node> hexNode = map.get(node);
         if(hexNode == null){
@@ -102,7 +142,6 @@ public class DataContainer {
             terminator.onContainerOpen();
         }
     }
-
     public void draw(){
         StringBuffer sb = new StringBuffer(this.width*8, this.height*4+2);
 
@@ -132,6 +171,9 @@ public class DataContainer {
         }
         sb.pushString(map.mesh.size() * 4, 0, "Your strength: " + virus.getStrength());
         sb.pushString(map.mesh.size() * 4+1, 0, "Your coherence: " + virus.getCoherence());
+        if(isSuppressed()){
+            sb.pushString(map.mesh.size() * 4, 25, "SUPPRESSED: " + getEffectiveVirusStrength());
+        }
         sb.render();
     }
     public void setGameTerminator(IGameTerminator terminator){

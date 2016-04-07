@@ -16,7 +16,7 @@ public class Node {
 
         state = NodeState.unexplorable;
     }
-    public void trigger(Virus virus){
+    public void trigger(){
         if (state == NodeState.explorable) {
             state = NodeState.explored;
             container.exposeSurroundings(this);

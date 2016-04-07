@@ -12,6 +12,18 @@ public class VirusSuppressorNode extends DefensiveSubsystemNode {
 
     @Override
     public String toString() {
-        return String.format("%03d\n{S}\n%03d", actor.getCoherence(), actor.getStrength());
+        switch (state){
+            case unexplorable:
+                return unexplorable;
+            case explorable:
+                return explorable;
+            case explored:
+                if(isAlive()){
+                    return String.format("%03d\n{S}\n%03d", actor.getCoherence(), actor.getStrength());
+                } else {
+                    return explored;
+                }
+        }
+        return "wtf\ntfw\nfwt";
     }
 }

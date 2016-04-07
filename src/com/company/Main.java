@@ -53,6 +53,7 @@ public class Main {
                     dataContainer.move(a[0],a[1]);
                 } catch (Exception x){
                     System.out.println(x.getMessage()+", try again");
+                    x.printStackTrace();
 
                 }
             }

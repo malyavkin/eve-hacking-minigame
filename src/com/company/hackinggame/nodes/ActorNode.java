@@ -1,21 +1,31 @@
 package com.company.hackinggame.nodes;
 
-import com.company.hackinggame.Actor;
-import com.company.hackinggame.DataContainer;
-import com.company.hackinggame.Node;
-import com.company.hackinggame.Virus;
+import com.company.hackinggame.*;
 
 public class ActorNode extends Node {
+    public int getCoherence(){
+        return actor.getCoherence();
+    }
+    public void setCoherence(int coherence){
+        this.actor.setCoherence(coherence);
+    }
+    public int getStrength(){
+        return actor.getStrength();
+    }
+
     Actor actor;
     public boolean isAlive(){
         return actor.isAlive();
+    }
+    public boolean isActive(){
+        return isAlive() && state == NodeState.explored;
     }
     public ActorNode (int strength, int coherence, final DataContainer container) {
         super(container);
         actor = new Actor(strength, coherence, container);
     }
-    public void getHit(Virus virus){
-        actor.setCoherence(actor.getCoherence()-virus.getStrength());
+    public void getHit(){
+        actor.setCoherence(actor.getCoherence()-container.getEffectiveVirusStrength());
     }
 
 

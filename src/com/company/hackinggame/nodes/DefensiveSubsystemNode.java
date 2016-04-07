@@ -6,12 +6,7 @@ import com.company.hackinggame.Virus;
 import com.company.hackinggame.handlers.IKillHandler;
 
 public class DefensiveSubsystemNode extends ActorNode {
-    public int getCoherence(){
-        return actor.getCoherence();
-    }
-    public int getStrength(){
-        return actor.getStrength();
-    }
+    public int lifeCounter = 0;
     public DefensiveSubsystemNode(int strength, int coherence, final DataContainer container) {
         super(strength, coherence, container);
         final DefensiveSubsystemNode ds =this;
@@ -23,20 +18,24 @@ public class DefensiveSubsystemNode extends ActorNode {
             }
         });
     }
-    public void hit(Virus virus){
-        virus.setCoherence(virus.getCoherence()-this.actor.getStrength());
+
+    /**
+     * Activity performed by (each) Defensive Subsystem each time virus makes a move
+     */
+    public void move(){
+
     }
     @Override
-    public void trigger(Virus virus) {
+    public void trigger() {
         switch (state){
             case explorable:
                 state = NodeState.explored;
                 container.blockSurroundings(this);
                 break;
             case explored:
-                getHit(virus);
+                getHit();
                 if(isAlive()){
-                    hit(virus);
+                    container.hitVirusWith(this);
                 }
                 break;
         }

@@ -18,16 +18,16 @@ public class SystemCoreNode extends DefensiveSubsystemNode {
     }
 
     @Override
-    public void trigger(Virus virus) {
+    public void trigger() {
         switch (state){
             case explorable:
                 state = NodeState.explored;
                 container.exposeSurroundings(this);
                 break;
             case explored:
-                getHit(virus);
+                getHit();
                 if(getCoherence() > 0){
-                    hit(virus);
+                    container.hitVirusWith(this);
                 }
                 break;
         }
